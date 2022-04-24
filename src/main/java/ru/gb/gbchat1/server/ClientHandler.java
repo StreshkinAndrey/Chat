@@ -29,6 +29,8 @@ public class ClientHandler {
                 try {
                     authenticate();
                     readMessages();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 } finally {
                     closeConnection();
                 }
@@ -66,7 +68,7 @@ public class ClientHandler {
         }
     }
 
-    private void authenticate() {
+    private void authenticate() throws InterruptedException {
         while (true) {
             try {
                 final String str = in.readUTF();
@@ -97,6 +99,8 @@ public class ClientHandler {
             }
 
         }
+        Thread.sleep(120000);
+        closeConnection();
     }
 
     public void sendMessage(Command command, String... params) {
