@@ -16,6 +16,16 @@ public class InMemoryAuthService implements AuthService {
     }
 
     @Override
+    public String getNickname(String login, String password) {
+        return null;
+    }
+
+    @Override
+    public boolean changeNickname(String currentNickname, String newNickname) {
+        return false;
+    }
+
+    @Override
     public String getNickByLoginAndPassword(String login, String password) {
         for (UserData user : users) {
             if (user.login.equals(login) && user.password.equals(password)) {
