@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
 
 import ru.gb.gbchat1.Command;
 
@@ -16,7 +17,7 @@ public class ClientHandler {
 
     private String nick;
 
-    public ClientHandler(Socket socket, ChatServer server, AuthService authService) {
+    public ClientHandler(Socket socket, ChatServer server, AuthService authService, ExecutorService executorService) {
         try {
             this.nick = "";
             this.socket = socket;
@@ -25,7 +26,8 @@ public class ClientHandler {
             this.out = new DataOutputStream(socket.getOutputStream());
             this.authService = authService;
 
-            new Thread(() -> {
+
+            executorService.submit(() -> {
                 try {
                     authenticate();
                     readMessages();
@@ -34,7 +36,7 @@ public class ClientHandler {
                 } finally {
                     closeConnection();
                 }
-            }).start();
+            });
 
         } catch (IOException e) {
             throw new RuntimeException(e);
